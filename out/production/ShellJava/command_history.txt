@@ -1,0 +1,6 @@
+\q
+exit
+echo
+echo <hehe>
+�history
+\l /dev/sda
