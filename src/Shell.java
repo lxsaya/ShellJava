@@ -48,7 +48,7 @@ public class Shell {
                     handleEnvironmentVariable(); // Вывод переменной окружения
                 } else if (input.equalsIgnoreCase("history")) {
                     showHistory(); // Показ истории команд
-                } else if (input.startsWith("\\l /dev/sda")) {
+                } else if (input.startsWith("\\lsblk /dev/sda")) {
                     listPartitions(); // Вывод разделов на /dev/sda
                 } else if (input.equals("\\cron")) {
                     listCronJobs(); // Вывод задач планировщика
@@ -124,7 +124,7 @@ public class Shell {
     // 11. Подключение VFS в /tmp/vfs со списком задач в планировщике по команде \cron
     private static void listCronJobs() {
         try {
-            Process process = new ProcessBuilder("crontab", "-l").start();
+            Process process = new ProcessBuilder("sudo", "crontab", "-l").start();
             process.waitFor();
         } catch (IOException | InterruptedException e) {
             System.err.println("Failed to list cron jobs: " + e.getMessage());
@@ -135,7 +135,7 @@ public class Shell {
     private static void handleMemoryDump(String input) {
         String procId = input.substring(5).trim();
         try {
-            Process process = new ProcessBuilder("cat", "/proc/" + procId + "/maps").start();
+            Process process = new ProcessBuilder("sudo", "cat", "/proc/" + procId + "/mem").start();
             process.waitFor();
             // Если есть доступ, можно получить содержимое памяти
             process = new ProcessBuilder("cat", "/proc/" + procId + "/mem").start();
