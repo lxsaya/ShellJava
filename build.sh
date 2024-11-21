@@ -39,7 +39,7 @@ javac -d bin src/Shell.java # Компилирует исходный файл S
 # Check if compilation succeeded
 if [ $? -eq 0 ]; then
     echo "Compilation successful. Running the shell..."
-    java -cp bin Shell
+    java -cp bin src.Shell
 else
     echo "Compilation failed. Please check your code for errors."
 fi
