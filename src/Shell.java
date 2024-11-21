@@ -13,7 +13,7 @@ public class Shell {
         System.out.println("  echo <message>       - Outputs the given message.");
         System.out.println("  history             - Displays the history of commands.");
         System.out.println("  \\e $PATH            - Displays the PATH environment variable.");
-        System.out.println("  \\l /dev/sda         - List partitions on /dev/sda.");
+        System.out.println("  \\lsblk /dev/sda         - List partitions on /dev/sda.");
         System.out.println("  \\cron               - List scheduled cron jobs.");
         System.out.println("  \\mem <procid>       - Dump memory of the specified process.");
         System.out.println("  exit, \\q            - Exits the shell.");
@@ -123,11 +123,19 @@ public class Shell {
 
     // 11. Подключение VFS в /tmp/vfs со списком задач в планировщике по команде \cron
     private static void listCronJobs() {
-        try {
-            Process process = new ProcessBuilder("sudo", "crontab", "-l").start();
-            process.waitFor();
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Failed to list cron jobs: " + e.getMessage());
+        File vfsFile = new File("/tmp/vfs");
+        try (FileWriter writer = new FileWriter(vfsFile)) {
+            File cronDir = new File("/var/spool/cron");
+            if (cronDir.exists() && cronDir.isDirectory()) {
+                for (File file : Objects.requireNonNull(cronDir.listFiles())) {
+                    writer.write(file.getName() + "\n");
+                }
+                System.out.println("VFS для задач cron создан в /tmp/vfs.");
+            } else {
+                System.out.println("Директория для задач cron не найдена.");
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка создания VFS: " + e.getMessage());
         }
     }
 
