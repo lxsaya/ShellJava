@@ -55,7 +55,7 @@ public class Shell {
                 } else if (input.startsWith("\\mem ")) {
                     handleMemoryDump(input); // Дамп памяти процесса
                 } else {
-                    runCommand(input); // Выполнение бинарных команд
+                    executeCommand(input);
                 }
             }
         } catch (Exception e) {
