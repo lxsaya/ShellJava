@@ -55,7 +55,7 @@ public class Shell {
                 } else if (input.startsWith("\\mem ")) {
                     handleMemoryDump(input); // Дамп памяти процесса
                 } else {
-                    executeCommand(input);
+                    runCommand(input);
                 }
             }
         } catch (Exception e) {
@@ -189,18 +189,6 @@ public class Shell {
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    // Выполнение внешней команды
-    private static void executeCommand(String command) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command.split("\\s+"));
-            pb.inheritIO();
-            Process process = pb.start();
-            process.waitFor();
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Ошибка выполнения команды: " + e.getMessage());
         }
     }
 }
